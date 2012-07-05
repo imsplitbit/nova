@@ -37,7 +37,8 @@ driver_opts = [
                help='Driver to use for controlling virtualization. Options '
                    'include: libvirt.LibvirtDriver, xenapi.XenAPIDriver, '
                    'fake.FakeDriver, baremetal.BareMetalDriver, '
-                   'vmwareapi.VMwareESXDriver, vmwareapi.VMwareVCDriver'),
+                   'vmwareapi.VMwareESXDriver, vmwareapi.VMwareVCDriver, '
+                   'openvz.OpenVzDriver'),
     cfg.StrOpt('default_ephemeral_format',
                help='The default format an ephemeral_volume will be '
                     'formatted with on creation.'),
@@ -63,8 +64,6 @@ def driver_dict_from_config(named_driver_config, *args, **kwargs):
         driver_type, _sep, driver = driver_str.partition('=')
         driver_class = importutils.import_class(driver)
         driver_registry[driver_type] = driver_class(*args, **kwargs)
-
-    return driver_registry
 
 
 def block_device_info_get_root(block_device_info):

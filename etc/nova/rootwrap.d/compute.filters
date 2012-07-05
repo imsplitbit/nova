@@ -124,6 +124,14 @@ ip6tables-restore: CommandFilter, ip6tables-restore, root
 # nova/network/linux_net.py: 'arping', '-U', network_ref['dhcp_server'],..
 arping: CommandFilter, arping, root
 
+# nova/network/linux_net.py: 'route', '-n'
+# nova/network/linux_net.py: 'route', 'del', 'default', 'gw'
+# nova/network/linux_net.py: 'route', 'add', 'default', 'gw'
+# nova/network/linux_net.py: 'route', '-n'
+# nova/network/linux_net.py: 'route', 'del', 'default', 'gw', old_gw, ..
+# nova/network/linux_net.py: 'route', 'add', 'default', 'gw', old_gateway
+route: CommandFilter, /sbin/route, root
+
 # nova/network/linux_net.py: 'dhcp_release', dev, address, mac_address
 dhcp_release: CommandFilter, dhcp_release, root
 
