@@ -99,10 +99,6 @@ openvz_conn_opts = [
     cfg.StrOpt('ovz_vzmigrate_opts',
                default=None,
                help='Optional arguments to pass to vzmigrate'),
-    cfg.StrOpt('ovz_numtcpsock_map',
-               default='{"8192": 3000, "1024": 2000, "4096": 2000, '
-                       '"2048": 2000, "16384": 4000, "512": 2000}',
-               help='Mapped values for flavors based on memory allocation'),
     cfg.BoolOpt('ovz_vzmigrate_online_migration',
                 default=True,
                 help='Perform an online migration of a container'),
@@ -182,7 +178,11 @@ openvz_conn_opts = [
     cfg.FloatOpt('ovz_cpulimit_overcommit_multiplier',
                  default=1.0,
                  help='Multiplier for cpulimit to facilitate over '
-                      'committing cpu resources')
+                      'committing cpu resources'),
+    cfg.DictOpt('ovz_numtcpsock_map',
+                default={"8192": 3000, "1024": 2000, "4096": 2000,
+                         "2048": 2000, "16384": 4000, "512": 2000},
+                help='Mapped values for flavors based on memory allocation'),
 ]
 
 CONF = cfg.CONF
@@ -830,7 +830,7 @@ class OpenVzDriver(driver.ComputeDriver):
         :return:
         """
         try:
-            tcp_sockets = json.loads(CONF.ovz_numtcpsock_map)[str(memory_mb)]
+            tcp_sockets = CONF.ovz_numtcpsock_map[str(memory_mb)]
         except (ValueError, TypeError, KeyError, cfg.NoSuchOptError):
             LOG.error(_('There was no acceptable tcpsocket number found '
                         'defaulting to %s') % CONF.ovz_numtcpsock_default)
